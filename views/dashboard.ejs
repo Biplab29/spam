@@ -1,0 +1,109 @@
+<%- include('partials/header') %>
+<h2 class="mb-3">Hello, <%= user.name %> 👋</h2>
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Your Contacts</h5>
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div class="alert alert-danger"><%= error %></div>
+        <% } %>
+        <% if (typeof added !== 'undefined' && added) { %>
+          <div class="alert alert-success"><%= added %></div>
+        <% } %>
+        <form class="row gy-2 gx-2 align-items-end mb-3" method="POST" action="/contacts">
+          <div class="col-md-5">
+            <label class="form-label">Name</label>
+            <input class="form-control" name="name" required>
+          </div>
+          <div class="col-md-5">
+            <label class="form-label">Phone</label>
+            <input class="form-control" name="phone" required>
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-primary w-100">Add</button>
+          </div>
+        </form>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead><tr><th>Name</th><th>Phone</th></tr></thead>
+            <tbody>
+              <% (contacts || []).forEach(c => { %>
+                <tr><td><%= c.name %></td><td><%= c.phone %></td></tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Quick Tools</h5>
+        <form id="searchForm" class="row gy-2 gx-2 align-items-end mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Search Query</label>
+            <input class="form-control" id="q" placeholder="name or phone">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Type</label>
+            <select class="form-select" id="type">
+              <option value="name">By Name</option>
+              <option value="phone">By Phone</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-outline-secondary w-100">Go</button>
+          </div>
+        </form>
+        <div id="results"></div>
+        <hr/>
+        <form id="spamForm" class="row gy-2 gx-2 align-items-end">
+          <div class="col-md-8">
+            <label class="form-label">Mark Number as Spam</label>
+            <input class="form-control" id="spamPhone" placeholder="e.g. 9998887777" required>
+          </div>
+          <div class="col-md-4">
+            <button class="btn btn-danger w-100">Report</button>
+          </div>
+        </form>
+        <div id="spamMsg" class="mt-2"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById("searchForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const q = document.getElementById("q").value.trim();
+  const type = document.getElementById("type").value;
+  const res = await fetch(`/search?q=${encodeURIComponent(q)}&type=${encodeURIComponent(type)}`);
+  const data = await res.json();
+  const div = document.getElementById("results");
+  if (!data.length) return div.innerHTML = '<div class="alert alert-info">No results</div>';
+  let html = '<div class="table-responsive"><table class="table table-hover"><thead><tr><th>Name</th><th>Phone</th><th>Spam %</th></tr></thead><tbody>';
+  html += data.map(r => `<tr><td>${r.name}</td><td>${r.phone}</td><td>${r.spam}</td></tr>`).join("");
+  html += '</tbody></table></div>';
+  div.innerHTML = html;
+});
+
+document.getElementById("spamForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const phone = document.getElementById("spamPhone").value.trim();
+  const res = await fetch("/spam", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ phone })
+  });
+  const msgDiv = document.getElementById("spamMsg");
+  if (res.ok) {
+    msgDiv.innerHTML = '<div class="alert alert-success">Marked as spam</div>';
+  } else {
+    const j = await res.json().catch(()=>({message:'Error'}));
+    msgDiv.innerHTML = `<div class="alert alert-danger">${j.message || 'Error'}</div>`;
+  }
+});
+</script>
+<%- include('partials/footer') %>
