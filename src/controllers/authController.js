@@ -20,6 +20,7 @@ exports.register = async (req, res) => {
     const token = generateToken(user.id);
     res.cookie("token", token, { httpOnly: true });
     res.redirect("/dashboard");
+    
   } catch (err) {
     res.render("register", { error: err.message });
   }
@@ -39,6 +40,7 @@ exports.login = async (req, res) => {
     const token = generateToken(user.id);
     res.cookie("token", token, { httpOnly: true });
     res.redirect("/dashboard");
+
   } catch (err) {
     res.render("login", { error: err.message });
   }

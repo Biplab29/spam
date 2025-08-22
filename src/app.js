@@ -52,8 +52,15 @@ app.use("/spam", spamRoutes);
 app.use("/search", searchRoutes);
 
 const PORT = process.env.PORT || 3000;
-sequelize.sync().then(() => {
-  app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
-}).catch(err => {
-  console.error("Sequelize error:", err.message);
-});
+
+sequelize.sync()
+  .then(() => {
+    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+  })
+  .catch(err => {
+    console.error("❌ Sequelize connection error:");
+    console.error(err); // full stack trace
+    process.exit(1);    // stop app
+  });
+
+

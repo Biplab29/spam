@@ -7,7 +7,9 @@ module.exports = async function protect(req, res, next) {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findByPk(decoded.id);
+
     if (!user) return res.redirect("/login");
+    
     req.user = user;
     res.locals.user = { id: user.id, name: user.name, phone: user.phone };
     next();
