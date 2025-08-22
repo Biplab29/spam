@@ -3,12 +3,11 @@
   "version": "1.0.0",
   "description": "Phone spam checker - REST API with EJS frontend (Express + Sequelize + MySQL)",
   "main": "src/app.js",
-"scripts": {
-  "start": "node src/app.js",       
-  "dev": "nodemon src/app.js",     
-  "seed": "node src/scripts/seed.js"
-},
-
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "seed": "node src/scripts/seed.js"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
@@ -16,6 +15,7 @@
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
+    "method-override": "^3.0.0",
     "mysql2": "^3.11.0",
     "sequelize": "^6.37.3"
   },

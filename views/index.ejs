@@ -1,5 +1,6 @@
 <%- include('partials/header') %>
-<div class="text-center">
+
+<!-- <div class="text-center">
   <h1 class="mb-3">Welcome to Spam Checker</h1>
   <p class="lead mb-4">Find names by phone, check spam likelihood, and keep your contacts clean.</p>
   <% if (!user) { %>
@@ -8,5 +9,22 @@
   <% } else { %>
     <a class="btn btn-success btn-lg" href="/dashboard">Go to Dashboard</a>
   <% } %>
+</div> -->
+
+
+
+<div class="text-center">
+  <h1 class="mb-3">Welcome to Spam Checker</h1>
+  <!-- <p class="lead mb-4">Find names by phone, check spam likelihood, and keep your contacts clean.</p> -->
+  <% if (!user) { %>
+    <a class="btn btn-primary btn-lg me-2" href="/login">Login</a>
+    <a class="btn btn-outline-secondary btn-lg" href="/register">Register</a>
+  <% } else { %>
+    <a class="btn btn-success btn-lg" href="/dashboard">Go to Dashboard</a>
+  <% } %>
 </div>
+
+
+
+
 <%- include('partials/footer') %>

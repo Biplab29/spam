@@ -27,10 +27,14 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../public")));
 
-// expose user to views if token present
+
 app.use(async (req, res, next) => {
+
   const token = req.cookies?.token;
-  if (!token) { res.locals.user = null; return next(); }
+
+  if (!token) { 
+    res.locals.user = null; return next(); 
+  }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findByPk(decoded.id);
@@ -51,16 +55,14 @@ app.use("/contacts", contactRoutes);
 app.use("/spam", spamRoutes);
 app.use("/search", searchRoutes);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT ;
 
-sequelize.sync()
-  .then(() => {
-    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-  })
-  .catch(err => {
-    console.error("❌ Sequelize connection error:");
-    console.error(err); // full stack trace
-    process.exit(1);    // stop app
-  });
+sequelize.sync().then(() => {
 
-
+  app.listen(PORT, () => 
+    console.log(`Server running at http://localhost:${PORT}`
+    ));
+    
+}).catch(err => {
+  console.error("Sequelize error:", err.message);
+});
