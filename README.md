@@ -1,4 +1,4 @@
-# Spam Checker API (Express + Sequelize + EJS)
+<!-- # Spam Checker API (Express + Sequelize + EJS)
 
 Feature set:
 - Register / Login (JWT in HTTP-only cookie)
@@ -21,4 +21,4 @@ Open http://localhost:3000
 Seeded demo users:
 - Alice — phone: 1111111111 — password: password123
 - Bob   — phone: 2222222222 — password: password123
-- Carol — phone: 3333333333 — password: password123
+- Carol — phone: 3333333333 — password: password123 -->

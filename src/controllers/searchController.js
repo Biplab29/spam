@@ -8,7 +8,7 @@ async function spamLikelihood(phone) {
   return Math.min(100, total * 10);
 }
 
-// Rendered search from dashboard uses JSON call to this endpoint
+
 exports.search = async (req, res) => {
   const { q, type = "name" } = req.query;
   if (!q) return res.json([]);

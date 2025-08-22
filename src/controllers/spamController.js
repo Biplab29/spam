@@ -1,6 +1,6 @@
 const SpamReport = require("../models/SpamReport");
 const User = require("../models/User");   
-const Contact = require("../models/Contact"); // optional, if you store spamScore in contacts
+const Contact = require("../models/Contact"); 
 
 exports.report = async (req, res) => {
   try {
@@ -9,19 +9,14 @@ exports.report = async (req, res) => {
       return res.status(400).json({ message: "Phone required" });
     }
 
-    // Create spam report
     await SpamReport.create({ phone, userId: req.user.id });
 
-    // Count how many unique reports this phone has
     const spamCount = await SpamReport.count({ where: { phone } });
 
-    // Count total registered users (to calculate percentage)
     const totalUsers = await User.count();
 
-    // Calculate spam percentage
     const spamPercentage = ((spamCount / totalUsers) * 100).toFixed(2);
 
-    // (Optional) update spam score in Contact table
     await Contact.update(
       { spamScore: spamPercentage },
       { where: { phone } }
