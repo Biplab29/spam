@@ -6,6 +6,7 @@ exports.showLogin = (req, res) => res.render("login", { error: null });
 exports.showRegister = (req, res) => res.render("register", { error: null });
 
 exports.register = async (req, res) => {
+  
   try {
     const { name, phone, email, password } = req.body;
     if (!name || !phone || !password) {

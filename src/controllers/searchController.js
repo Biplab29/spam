@@ -19,11 +19,13 @@ exports.search = async (req, res) => {
       attributes: ["name", "phone"],
       limit: 25
     });
+
     const contains = await Contact.findAll({
       where: { name: { [Op.like]: `%${q}%` } },
       attributes: ["name", "phone"],
       limit: 25
     });
+
     const combined = [...starts, ...contains.filter(c => !starts.find(s => s.phone === c.phone && s.name === c.name))];
     const results = await Promise.all(combined.map(async r => ({
       name: r.name,
@@ -31,17 +33,21 @@ exports.search = async (req, res) => {
       spam: await spam(r.phone)
     })));
     return res.json(results);
+
   } else {
     const user = await User.findOne({ where: { phone: q } });
+    
     if (user) {
       return res.json([{
         name: user.name, phone: user.phone, registered: true, spam: await spam(user.phone)
       }]);
     }
+
     const contacts = await Contact.findAll({ where: { phone: q }, attributes: ["name", "phone"] });
     const results = await Promise.all(contacts.map(async c => ({
       name: c.name, phone: c.phone, registered: false, spam: await spam(c.phone)
     })));
+
     return res.json(results);
   }
 };

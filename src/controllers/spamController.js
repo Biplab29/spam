@@ -3,6 +3,7 @@ const User = require("../models/User");
 const Contact = require("../models/Contact"); 
 
 exports.report = async (req, res) => {
+  
   try {
     const { phone } = req.body;
     if (!phone) {
@@ -28,8 +29,8 @@ exports.report = async (req, res) => {
     });
 
   } catch (e) {
-    if (e.message.includes("unique") || e.message.includes("Unique")) {
-      return res.status(409).json({ message: "Already reported" });
+    if (e.message.includes("unique")) {
+      return res.status(401).json({ message: "Already reported" });
     }
     console.error(e);
     return res.status(500).json({ message: e.message });

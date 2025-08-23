@@ -228,6 +228,7 @@ document.getElementById("spamForm").addEventListener("submit", async (e) => {
   </div>
 </main>
 
+
 <script>
 document.getElementById("searchForm").addEventListener("submit", async (e) => {
   
@@ -252,6 +253,7 @@ document.getElementById("spamForm").addEventListener("submit", async (e) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ phone })
   });
+  
   const msgDiv = document.getElementById("spamMsg");
   if (res.ok) {
     msgDiv.innerHTML = '<div class="alert alert-success">Marked as spam</div>';
